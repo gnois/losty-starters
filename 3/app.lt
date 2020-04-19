@@ -1,0 +1,75 @@
+var content = require('losty.content')
+var server = require('losty.web')
+var view = require('losty.view')
+var tbl = require('losty.tbl')
+
+var web = server()
+var w = web.route()
+
+var Contact = "/contact"
+
+var template = \args ->
+	return html({
+		head({
+			meta('[charset=UTF-8]')
+			, title(args.title)
+			, link({rel='stylesheet', href='index.css'})
+		})
+		, body({
+			div('.center', {
+				h1(args.title)
+				, div(args.message)
+				, args.form and form({submit=Contact, method="POST"}, {
+					input("[name=info][type=text][min=3][required]")
+					, div(button("[type=submit]", 'Submit'))
+				}) or span()
+			})
+			, footer({
+				hr()
+				, div('.center', '&copy' .. args.copyright)
+			})
+		})
+	})
+
+var page = \args ->
+	args.copyright = 'My website'
+	return view(template, args)
+
+w.get("/", \q, r -> 
+	print('Browser id: ' .. q.id)
+	r.redirect('/index')
+)
+
+
+w.get("/:%a+", \q, r ->
+	r.status = 200
+	r.headers['content-type'] = "text/plain"
+	return "Found anything at /" .. q.match[1] .. "?"
+)
+
+w.get(Contact, \q, r ->
+	r.status = 200
+	r.headers['content-type'] = "text/html"
+	return page({
+		title = 'Contact'
+		, message = 'Message me:'
+		, form = true
+	})
+)
+
+w.post(Contact, content.form, \q, r, body ->
+	r.status = 204
+	tbl.show(body)
+)
+
+-- list of custom error pages
+var errors = {
+	[404] = ->
+		return page({
+			title = '404 Not Found'
+			, message = 'Nothing here'
+		})
+}
+
+return ->
+	web.run(errors)

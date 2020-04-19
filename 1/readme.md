@@ -1,15 +1,21 @@
 ## Example 1
 
-
-#### Highlights
-- nginx.conf with app.lua preload
-- templated views with parameters
-- custom error page
-- HTTP get with header and status
-- Route matching with [Lua patterns](https://www.lua.org/pil/20.2.html) and captured parameter
+Minimal inline demo
 
 
-#### Run with
+#### Commands
+
+Run
 ```
 nginx -p . -c nginx.conf
+```
+
+Reload
+```
+nginx -s reload
+```
+
+Stop
+```
+nginx -s quit
 ```
