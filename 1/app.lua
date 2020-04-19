@@ -37,6 +37,13 @@ w.get("/", function(q, r)
     return page({title = "Hi", message = "Losty is live!"})
 end)
 
+w.get("/:%a+", function(q, r)
+    r.status = 200
+    r.headers["content-type"] = "text/html"
+    return page({title = q.match[1], message = "Match route: " .. q.match[1] or "?"})
+end)
+
+
 local errors = {
     [404] = not_found()
 }

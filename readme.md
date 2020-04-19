@@ -1,11 +1,12 @@
-#Losty starter projects
+# Losty starter projects
 
-Some starter projects for experimenting with [Losty](https://github.com/gnois/losty)
+Some starter projects for experimenting with OpenResty and Losty
 
 
-General requirements:
-- [OpenResty](http://openresty.org/en/installation.html) installed
-- [Losty](https://github.com/gnois/losty#installation) installed
-- `nginx` executable is found in path
+### Requirements:
+
+- [OpenResty](http://openresty.org/en/installation.html)
+- [Losty](https://github.com/gnois/losty#installation)
+- `nginx` executable found in path
 	- it resides in `<openresty-prefix>/bin`
 

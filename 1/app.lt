@@ -33,12 +33,21 @@ var not_found = ->
 		, message = 'Nothing here'
 	})
 
-w.get('/', \q, r ->
+w.get("/", \q, r ->
 	r.status = 200
-	r.headers['content-type'] = 'text/html'
+	r.headers['content-type'] = "text/html"
 	return page({
-		title = 'Hi'
-		, message = 'Losty is live!'
+		title = "Hi"
+		, message = "Losty is live!"
+	})
+)
+
+w.get("/:%a+", \q, r ->
+	r.status = 200
+	r.headers['content-type'] = "text/html"
+	return page({
+		title = q.match[1]
+		, message = "Match route: " .. q.match[1] or "?"
 	})
 )
 
