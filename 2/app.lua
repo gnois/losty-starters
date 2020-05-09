@@ -1,6 +1,5 @@
-local server = require("losty.web")
+local web = require("losty.web")
 local view = require("losty.view")
-local web = server()
 local w = web.route()
 
 function template(args)

@@ -2,10 +2,9 @@
 -- Generated from app.lt
 --
 local content = require("losty.content")
-local server = require("losty.web")
+local web = require("losty.web")
 local view = require("losty.view")
 local tbl = require("losty.tbl")
-local web = server()
 local w = web.route()
 local Contact = "/contact"
 local template = function(args)
@@ -24,9 +23,8 @@ w.get("/:%a+", function(q, r)
     r.headers["content-type"] = "text/plain"
     return "Found anything at /" .. q.match[1] .. "?"
 end)
-w.get(Contact, function(q, r)
+w.get(Contact, content.html, function(q, r)
     r.status = 200
-    r.headers["content-type"] = "text/html"
     return page({title = "Contact", message = "Message me:", form = true})
 end)
 w.post(Contact, content.form, function(q, r, body)

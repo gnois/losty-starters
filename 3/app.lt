@@ -1,9 +1,8 @@
 var content = require('losty.content')
-var server = require('losty.web')
+var web = require('losty.web')
 var view = require('losty.view')
 var tbl = require('losty.tbl')
 
-var web = server()
 var w = web.route()
 
 var Contact = "/contact"
@@ -47,9 +46,8 @@ w.get("/:%a+", \q, r ->
 	return "Found anything at /" .. q.match[1] .. "?"
 )
 
-w.get(Contact, \q, r ->
+w.get(Contact, content.html, \q, r ->
 	r.status = 200
-	r.headers['content-type'] = "text/html"
 	return page({
 		title = 'Contact'
 		, message = 'Message me:'
