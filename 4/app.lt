@@ -1,5 +1,5 @@
 var content = require('losty.content')
-var web = require('losty.web')
+var web = require('losty.web')()
 var view = require('losty.view')
 var sess = require('losty.sess')('sessy', "This IS secret", "this is key")
 

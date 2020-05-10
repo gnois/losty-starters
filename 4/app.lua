@@ -2,7 +2,7 @@
 -- Generated from app.lt
 --
 local content = require("losty.content")
-local web = require("losty.web")
+local web = require("losty.web")()
 local view = require("losty.view")
 local sess = require("losty.sess")("sessy", "This IS secret", "this is key")
 local w = web.route()

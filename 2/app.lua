@@ -1,4 +1,4 @@
-local web = require("losty.web")
+local web = require("losty.web")()
 local view = require("losty.view")
 local w = web.route()
 
