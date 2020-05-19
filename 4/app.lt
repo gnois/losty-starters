@@ -1,9 +1,13 @@
 var content = require('losty.content')
-var web = require('losty.web')()
 var view = require('losty.view')
-var sess = require('losty.sess')('sessy', "This IS secret", "this is key")
+var web = require('losty.web')()
+var cred = require('credential')
+var sess = require('losty.sess')('sessy', cred.session.secret, cred.session.key)
+var csrf = require('losty.csrf')(cred.csrf)
 
 var w = web.route()
+
+var Sess = "/sess"
 
 var template = \args ->
 	return html({
@@ -24,48 +28,57 @@ var template = \args ->
 				h1(args.title)
 				, div(args.message)
 				, br()
-				, args.home and a({href="/sess"}, "Set session data") or form({submit=Contact, method="POST"}, {
-					input("[name=data][type=text][min=1][required]")
-					, div(button("[type=submit]", 'Submit'))
-				})
+				, args.token and form({submit=Sess, method="POST"}, {
+					input({type='hidden', name='token', value=args.token})
+					, input("[name=data][type=text][min=1][required]")
+					, div(button("[type=submit]", "Submit"))
+				}) or a({href="/sess"}, "Set session data")
 			})
 			, footer({
 				hr()
-				, div('.center', '&copy' .. args.copyright)
+				, div('.center', "&copy" .. args.copyright)
 			})
 		})
 	})
 
 var page = \args ->
-	args.copyright = 'My website'
+	args.copyright = "My website"
 	return view(template, args)
 
 
-w.get('/', content.html, \q, r ->
+w.get("/", content.html, \q, r ->
 	r.status = 200
 	var s = sess.read(q)
 	return page({
 		title = "Session"
 		, message = s and s.data or "No data yet"
-		, home = true
 	})
 )
 
 
-w.get("/sess", content.html, \q, r -> 
+w.get(Sess, content.html, \q, r -> 
 	r.status = 200
 	return page({
 		title = "Session demo"
 		, message = "Session data:"
-		, home = false
+		, token = csrf.create(q, r)
 	})
 )
 
-w.post("/sess", content.form, \q, r, body ->
+var prepost = \... ->
+	return content.form, \q, r, body ->
+		if csrf.check(q, r, body.token)
+			return q.next()
+		r.status = 403
+	, ...
+
+
+w.post(Sess, prepost(\q, r, body ->
 	var s = sess.create(q, r, 24 * 3600 * 1)  -- keep for 1 day
 	s.data = body.data
-	r.redirect('/')
-)
+	r.redirect("/")
+))
+
 
 return ->
 	web.run()

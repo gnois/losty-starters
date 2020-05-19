@@ -4,8 +4,9 @@
 #### Highlights
 - another way to specify inline css styles
 - session cookie
-- form submission
-- input validation and transform
+- form submission with csrf protection
+- function returning multiple middlewares, a pattern when using Losty
+
 
 
 #### Run with
