@@ -30,7 +30,7 @@ w.get("/", content.html, function(q, r)
 end)
 w.get(Sess, content.html, function(q, r)
     r.status = 200
-    return page({title = "Session demo", message = "Session data:", token = "ana"})
+    return page({title = "Session demo", message = "Session data:", token = csrf.create(q, r)})
 end)
 local prepost = function(...)
     return content.form, function(q, r, body)
